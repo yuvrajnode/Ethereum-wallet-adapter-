@@ -6,6 +6,10 @@ A modern, sleek React application for connecting to Ethereum wallets using wagmi
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite)
 
+## Deployment Link
+
+https://ethereum-wallet-adapter-indol.vercel.app
+
 ## Features
 
 - **Modern UI**: Beautiful glassmorphism design with gradient accents
