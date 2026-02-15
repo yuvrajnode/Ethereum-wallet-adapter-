@@ -47,7 +47,7 @@ function WalletConnector() {
   return (
     <div className="wallet-section">
       <span className="section-label">Connect Wallet</span>
-      <div>
+      <div className="connect-buttons-container">
         {connectors.map((connector) => (
           <button
             type="button"
@@ -55,7 +55,7 @@ function WalletConnector() {
             key={connector.uid}
             onClick={() => connect({ connector })}
           >
-            Connect {connector.name}
+            {connector.name}
           </button>
         ))}
       </div>
