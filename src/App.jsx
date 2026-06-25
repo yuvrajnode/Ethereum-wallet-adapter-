@@ -1,77 +1,55 @@
-import { WagmiProvider, useConnect, useAccount, useConnectors } from 'wagmi'
+import { useState } from 'react'
+import { WagmiProvider, useAccount } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { config } from './config.js'
+import Header from './components/Header.jsx'
+import Landing from './components/Landing.jsx'
+import Dashboard from './components/Dashboard.jsx'
+import ConnectModal from './components/ConnectModal.jsx'
 
-// Create TanStack Query client
 const queryClient = new QueryClient()
 
-function App() {
+export default function App() {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <div className="wallet-container">
-          <h1 className="wallet-title">Ethereum Wallet</h1>
-          <p className="wallet-subtitle">Connect your wallet to get started</p>
-          <WalletConnector />
-          <div className="divider"></div>
-          <MyAddress />
-          <div className="divider"></div>
-          <EthSend />
-        </div>
+        <Shell />
       </QueryClientProvider>
     </WagmiProvider>
   )
 }
 
-function MyAddress() {
-  const { address } = useAccount()
+function Shell() {
+  const { isConnected } = useAccount()
+  const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <div className="wallet-section">
-      <span className="section-label">Your Address</span>
-      <div className={`address-display ${address ? '' : 'not-connected'}`}>
-        {address ? address : "Not Connected"}
-      </div>
+    <div className="app">
+      <Header onConnect={() => setModalOpen(true)} />
+
+      <main className="app-main">
+        {isConnected ? (
+          <Dashboard />
+        ) : (
+          <Landing onConnect={() => setModalOpen(true)} />
+        )}
+      </main>
+
+      <footer className="app-footer">
+        <span>
+          Built with{' '}
+          <a href="https://wagmi.sh" target="_blank" rel="noreferrer">
+            wagmi
+          </a>{' '}
+          &amp;{' '}
+          <a href="https://viem.sh" target="_blank" rel="noreferrer">
+            viem
+          </a>
+        </span>
+        <span className="footer-note">Non-custodial · Your keys, your coins</span>
+      </footer>
+
+      <ConnectModal open={modalOpen} onClose={() => setModalOpen(false)} />
     </div>
   )
 }
-
-function WalletConnector() {
-
-  // action hook
-  const { connect } = useConnect()
-
-  // connectors list (NEW recommended hook)
-  const connectors = useConnectors()
-
-  return (
-    <div className="wallet-section">
-      <span className="section-label">Connect Wallet</span>
-      <div>
-        {connectors.map((connector) => (
-          <button
-            type="button"
-            className="connect-button"
-            key={connector.uid}
-            onClick={() => connect({ connector })}
-          >
-            Connect {connector.name}
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function EthSend() {
-  return (
-    <div className="wallet-section">
-      <span className="section-label">Send ETH</span>
-      <div className="eth-send-placeholder">
-        Coming Soon
-      </div>
-    </div>
-  )
-}
-
-export default App
