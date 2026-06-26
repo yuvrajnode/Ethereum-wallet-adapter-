@@ -1,6 +1,6 @@
 # Ethereum Wallet Adapter
 
-A modern, sleek React application for connecting to Ethereum wallets using wagmi and Viem. Built with Vite for fast development and optimal performance.
+A modern, sleek React application for connecting to Ethereum wallets using wagmi and Viem. Connect a wallet, view balances across six networks, send ETH with live validation, and track transactions on-chain — all from one clean, non-custodial dashboard. Built with Vite for fast development and optimal performance.
 
 ![Ethereum Wallet Adapter](https://img.shields.io/badge/Ethereum-Wallet-blue?style=for-the-badge&logo=ethereum)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
@@ -12,11 +12,14 @@ https://ethereum-wallet-adapter-indol.vercel.app
 
 ## Features
 
-- **Modern UI**: Beautiful glassmorphism design with gradient accents
-- **Wallet Connection**: Seamless integration with MetaMask and other injected wallets
-- **Address Display**: Shows connected wallet address with elegant styling
-- **Fast & Lightweight**: Built with Vite for lightning-fast development
-- **Type-Safe**: Powered by wagmi and Viem for robust Web3 interactions
+- **Multi-wallet connect**: A connect modal lists every available wallet (MetaMask, Coinbase Wallet, and any injected browser wallet) with per-wallet connection states and error handling.
+- **Account dashboard**: View your ENS name (if any), shortened address with one-click copy, and live native balance.
+- **Multi-chain**: Switch between Ethereum, Base, Arbitrum, Optimism, Polygon and Sepolia, with a testnet warning when relevant.
+- **Send ETH**: Send native ETH with client-side validation (valid address, positive amount, balance check, no self-sends), a **Max** helper, and live confirmation tracking with a block-explorer link.
+- **Receive**: Display your full address for the active network with copy and explorer shortcuts.
+- **Landing page**: A hero + feature grid for visitors who haven't connected yet.
+- **Polished UI/UX**: Glassmorphism design with gradient accents, a tabbed dashboard, skeleton loaders, modal animations, and a fully responsive mobile layout.
+- **Non-custodial**: Keys never leave your wallet; nothing is stored on any server.
 
 ## Tech Stack
 
@@ -28,7 +31,7 @@ https://ethereum-wallet-adapter-indol.vercel.app
 
 ## Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - A Web3 wallet (MetaMask, Coinbase Wallet, etc.)
 
 ## Installation
@@ -49,10 +52,11 @@ npm run dev
 
 ## Usage
 
-1. Open the application in your browser (default: http://localhost:5173)
-2. Click "Connect [Wallet Name]" to connect your Web3 wallet
-3. Your wallet address will be displayed once connected
-4. The Send ETH feature is coming soon!
+1. Open the application in your browser (default: http://localhost:5173).
+2. Click **Connect Wallet** and pick a wallet from the modal.
+3. On the **Overview** tab, view your balance and switch networks.
+4. Use the **Send** tab to transfer ETH and watch the transaction confirm.
+5. Use the **Receive** tab to copy your address and share it.
 
 ## Available Scripts
 
@@ -68,11 +72,20 @@ npm run dev
 ```
 Eth-wallet-adapter/
 ├── src/
-│   ├── App.jsx          # Main application component
-│   ├── App.css          # Application styles
-│   ├── config.js        # wagmi configuration
-│   ├── main.jsx         # Application entry point
-│   └── index.css        # Global styles
+│   ├── components/
+│   │   ├── Header.jsx        # Brand + connect / account control
+│   │   ├── Landing.jsx       # Hero + feature grid (disconnected state)
+│   │   ├── ConnectModal.jsx  # Wallet selection modal
+│   │   ├── Dashboard.jsx     # Tabbed connected experience
+│   │   ├── AccountCard.jsx   # Balance, ENS, copy, network switcher
+│   │   ├── SendEth.jsx       # Send ETH with validation + tx tracking
+│   │   └── Receive.jsx       # Receive address view
+│   ├── App.jsx               # App shell + providers
+│   ├── App.css               # Component styles
+│   ├── config.js             # wagmi multi-chain configuration
+│   ├── utils.js              # Address / balance / explorer helpers
+│   ├── main.jsx              # Application entry point
+│   └── index.css             # Global resets + design tokens
 ├── package.json
 ├── vite.config.js
 └── README.md
@@ -80,13 +93,13 @@ Eth-wallet-adapter/
 
 ## Architecture
 
-The application uses a modular architecture:
+The application is split into focused, single-responsibility components:
 
-- **config.js**: Contains wagmi configuration for Ethereum mainnet
-- **App.jsx**: Main component with wallet connection and address display
-- **WalletConnector**: Handles wallet connection UI and logic
-- **MyAddress**: Displays the connected wallet address
-- **EthSend**: Placeholder for future ETH transfer functionality
+- **config.js**: wagmi configuration for all supported chains, transports and connectors.
+- **utils.js**: pure helpers for shortening addresses, formatting balances and building explorer URLs.
+- **App.jsx**: wraps the app in the Wagmi and React Query providers and switches between the landing page and the dashboard based on connection state.
+- **Dashboard.jsx**: hosts the Overview / Send / Receive tabs.
+- **AccountCard / SendEth / Receive**: the three connected views.
 
 ## Contributing
 
@@ -101,4 +114,3 @@ MIT License - feel free to use this project for personal or commercial purposes.
 - [wagmi](https://wagmi.sh) - React Hooks for Ethereum
 - [Viem](https://viem.sh) - TypeScript interface for Ethereum
 - [Vite](https://vitejs.dev) - Next Generation Frontend Tooling
-
